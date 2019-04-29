@@ -5,7 +5,7 @@
  * This library required WiFi101 Library to be installed.
  * https://github.com/arduino-libraries/WiFi101
  * 
- * April 11, 2019
+ * April 29, 2019
  * 
  * The MIT License (MIT)
  * Copyright (c) 2019 K. Suwatchai (Mobizt)
