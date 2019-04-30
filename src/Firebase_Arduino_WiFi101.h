@@ -1,16 +1,17 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.0
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.1
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* April 29, 2019
+* April 30, 2019
 * 
 * Feature Added:
+* - Add keywords
 * 
 * Feature Fixed:
-* Fixed Boolean data type misconception
+* 
 * 
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
 * and delete calls.
@@ -47,13 +48,12 @@
 #include "Firebase_Arduino_WiFi101_HTTPClient.h"
 
 #include <avr/pgmspace.h>
-#if defined(__arm__) 
+#if defined(__arm__)
 #include <avr/dtostrf.h>
 #elif defined(__AVR__)
 #else
 #error Architecture or board not supported.
 #endif
-
 
 #define FIEBASE_PORT 443
 #define FIREBASE_RESPONSE_SIZE 400
@@ -181,31 +181,30 @@ const char C_STR_111[] PROGMEM = "http://";
 const char C_STR_112[] PROGMEM = "https://";
 
 const char *const string_table[] PROGMEM = {
-  C_STR_0,
-  C_STR_1, C_STR_2, C_STR_3, C_STR_4, C_STR_5,
-  C_STR_6, C_STR_7, C_STR_8, C_STR_9, C_STR_10,
-  C_STR_11, C_STR_12, C_STR_13, C_STR_14, C_STR_15,
-  C_STR_16, C_STR_17, C_STR_18, C_STR_19, C_STR_20,
-  C_STR_21, C_STR_22, C_STR_23, C_STR_24, C_STR_25,
-  C_STR_26, C_STR_27, C_STR_28, C_STR_29, C_STR_30,
-  C_STR_31, C_STR_32, C_STR_33, C_STR_34, C_STR_35,
-  C_STR_36, C_STR_37, C_STR_38, C_STR_39, C_STR_40,
-  C_STR_41, C_STR_42, C_STR_43, C_STR_44, C_STR_45,
-  C_STR_46, C_STR_47, C_STR_48, C_STR_49, C_STR_50,
-  C_STR_51, C_STR_52, C_STR_53, C_STR_54, C_STR_55,
-  C_STR_56, C_STR_57, C_STR_58, C_STR_59, C_STR_60,
-  C_STR_61, C_STR_62, C_STR_63, C_STR_64, C_STR_65,
-  C_STR_66, C_STR_67, C_STR_68, C_STR_69, C_STR_70,
-  C_STR_71, C_STR_72, C_STR_73, C_STR_74, C_STR_75,
-  C_STR_76, C_STR_77, C_STR_78, C_STR_79, C_STR_80,
-  C_STR_81, C_STR_82, C_STR_83, C_STR_84, C_STR_85,
-  C_STR_86, C_STR_87, C_STR_88, C_STR_89, C_STR_90,
-  C_STR_91, C_STR_92, C_STR_93, C_STR_94, C_STR_95,
-  C_STR_96, C_STR_97, C_STR_98, C_STR_99, C_STR_100,
-  C_STR_101, C_STR_102, C_STR_103, C_STR_104, C_STR_105,
-  C_STR_106, C_STR_107, C_STR_108, C_STR_109, C_STR_110,
-  C_STR_111, C_STR_112
-};
+    C_STR_0,
+    C_STR_1, C_STR_2, C_STR_3, C_STR_4, C_STR_5,
+    C_STR_6, C_STR_7, C_STR_8, C_STR_9, C_STR_10,
+    C_STR_11, C_STR_12, C_STR_13, C_STR_14, C_STR_15,
+    C_STR_16, C_STR_17, C_STR_18, C_STR_19, C_STR_20,
+    C_STR_21, C_STR_22, C_STR_23, C_STR_24, C_STR_25,
+    C_STR_26, C_STR_27, C_STR_28, C_STR_29, C_STR_30,
+    C_STR_31, C_STR_32, C_STR_33, C_STR_34, C_STR_35,
+    C_STR_36, C_STR_37, C_STR_38, C_STR_39, C_STR_40,
+    C_STR_41, C_STR_42, C_STR_43, C_STR_44, C_STR_45,
+    C_STR_46, C_STR_47, C_STR_48, C_STR_49, C_STR_50,
+    C_STR_51, C_STR_52, C_STR_53, C_STR_54, C_STR_55,
+    C_STR_56, C_STR_57, C_STR_58, C_STR_59, C_STR_60,
+    C_STR_61, C_STR_62, C_STR_63, C_STR_64, C_STR_65,
+    C_STR_66, C_STR_67, C_STR_68, C_STR_69, C_STR_70,
+    C_STR_71, C_STR_72, C_STR_73, C_STR_74, C_STR_75,
+    C_STR_76, C_STR_77, C_STR_78, C_STR_79, C_STR_80,
+    C_STR_81, C_STR_82, C_STR_83, C_STR_84, C_STR_85,
+    C_STR_86, C_STR_87, C_STR_88, C_STR_89, C_STR_90,
+    C_STR_91, C_STR_92, C_STR_93, C_STR_94, C_STR_95,
+    C_STR_96, C_STR_97, C_STR_98, C_STR_99, C_STR_100,
+    C_STR_101, C_STR_102, C_STR_103, C_STR_104, C_STR_105,
+    C_STR_106, C_STR_107, C_STR_108, C_STR_109, C_STR_110,
+    C_STR_111, C_STR_112};
 
 #define FBDATA_PATH_LENGTH 200
 #define FBDATA_PATH2_LENGTH 200
@@ -250,11 +249,10 @@ class QueryFilter
 
     //Clear all query
     void clearQuery();
-    
+
     //Release memory used by QueryFilter object
     void end();
-    
-    
+
     friend Firebase_Arduino_WiFi101;
 
   protected:
@@ -265,8 +263,6 @@ class QueryFilter
     char *_endAt = new char[QUERY_ENDAT_LENGTH];
     char *_equalTo = new char[QUERY_EQUALTO_LENGTH];
     void strCopy_T(char *buf, uint16_t index, bool empty = false, uint16_t size = 0);
-
-
 };
 
 class Firebase_Arduino_WiFi101
@@ -296,7 +292,6 @@ class Firebase_Arduino_WiFi101
 
     */
     void reconnectWiFi(bool reconnect);
-
 
     /*
         Append new integer value to the defined database path.
