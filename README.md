@@ -68,11 +68,23 @@ This following devices were tested and work well.
 ## Dependencies
 
 
-This library required [WiFi101 Library](https://github.com/arduino-libraries/WiFi101) to be installed which can be installed through **Board Manager**
+This library required [WiFi101 Library](https://github.com/arduino-libraries/WiFi101) to be installed which can be installed through **Boards Manager**
 
 
 ## Installing
 
+
+### Using Library Manager
+
+
+At Arduino IDE goto menu **Sketch** -> **Include Library** -> **Manage Libraries...**
+
+
+In Library Manager Window, search **"firebase"** in the search form then select **"Firebase Arduino based on WiFi101"** and click **"Install"** button.
+
+
+
+### Manual installing
 
 
 Click at **Clone or download** dropdown at the top of repository, select **Download ZIP** and save file on your computer.
