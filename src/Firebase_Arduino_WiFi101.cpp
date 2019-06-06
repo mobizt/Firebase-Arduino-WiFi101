@@ -1,5 +1,5 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.3
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.4
 * 
 *
 * This library required WiFi101 Library to be installed.
@@ -137,7 +137,7 @@ bool Firebase_Arduino_WiFi101::pushTimestamp(FirebaseData &dataObj, const String
   char *tmp = new char[60];
   strCopy_T(tmp, 113, true, 60);
 
-  bool flag = buildRequest(dataObj, path.c_str(), FirebaseMethod::POST, FirebaseDataType::TIMESTAMP, tmp);
+  bool flag = sendRequest(dataObj, path.c_str(), FirebaseMethod::POST, FirebaseDataType::TIMESTAMP, tmp);
   delete[] tmp;
   return flag;
 }
@@ -195,7 +195,7 @@ bool Firebase_Arduino_WiFi101::setTimestamp(FirebaseData &dataObj, const String 
   char *tmp = new char[60];
   strCopy_T(tmp, 113, true, 60);
 
-  bool flag = buildRequest(dataObj, path.c_str() ,FirebaseMethod::PUT, FirebaseDataType::TIMESTAMP, tmp);
+  bool flag = sendRequest(dataObj, path.c_str(), FirebaseMethod::PUT, FirebaseDataType::TIMESTAMP, tmp);
   delete[] tmp;
   return flag;
 }
