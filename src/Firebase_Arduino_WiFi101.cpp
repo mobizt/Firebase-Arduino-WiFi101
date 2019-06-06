@@ -135,7 +135,7 @@ bool Firebase_Arduino_WiFi101::pushJSON(FirebaseData &dataObj, const String &pat
 bool Firebase_Arduino_WiFi101::pushTimestamp(FirebaseData &dataObj, const String &path)
 {
   char *tmp = new char[60];
-  strCopy_T(tmp, 113, true);
+  strCopy_T(tmp, 113, true, 60);
 
   bool flag = buildRequest(dataObj, path.c_str(), FirebaseMethod::POST, FirebaseDataType::TIMESTAMP, tmp);
   delete[] tmp;
@@ -193,7 +193,7 @@ bool Firebase_Arduino_WiFi101::setJSON(FirebaseData &dataObj, const String &path
 bool Firebase_Arduino_WiFi101::setTimestamp(FirebaseData &dataObj, const String &path)
 {
   char *tmp = new char[60];
-  strCopy_T(tmp, 113, true);
+  strCopy_T(tmp, 113, true, 60);
 
   bool flag = buildRequest(dataObj, path.c_str() ,FirebaseMethod::PUT, FirebaseDataType::TIMESTAMP, tmp);
   delete[] tmp;
