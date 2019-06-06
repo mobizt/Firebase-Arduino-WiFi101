@@ -1,14 +1,14 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.1
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.3
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* April 30, 2019
+* June 6, 2019
 * 
 * Feature Added:
-* - Add keywords
+* - Set and push timestamp
 * 
 * Feature Fixed:
 * 
@@ -179,6 +179,7 @@ const char C_STR_109[] PROGMEM = "cancel";
 const char C_STR_110[] PROGMEM = "auth_revoked";
 const char C_STR_111[] PROGMEM = "http://";
 const char C_STR_112[] PROGMEM = "https://";
+const char C_STR_113[] PROGMEM = "{\".sv\": \"timestamp\"}";
 
 const char *const string_table[] PROGMEM = {
     C_STR_0,
@@ -204,7 +205,7 @@ const char *const string_table[] PROGMEM = {
     C_STR_96, C_STR_97, C_STR_98, C_STR_99, C_STR_100,
     C_STR_101, C_STR_102, C_STR_103, C_STR_104, C_STR_105,
     C_STR_106, C_STR_107, C_STR_108, C_STR_109, C_STR_110,
-    C_STR_111, C_STR_112};
+    C_STR_111, C_STR_112, C_STR_113};
 
 #define FBDATA_PATH_LENGTH 200
 #define FBDATA_PATH2_LENGTH 200
@@ -369,6 +370,20 @@ class Firebase_Arduino_WiFi101
     bool pushJSON(FirebaseData &dataObj, const String &path, const String &jsonString);
 
     /*
+        Append new Firebase server's timestamp to the defined database path.
+
+        @param dataObj - Firebase Data Object to hold data and instances.
+        @param path - Target database path which timestamp will be appended.
+
+        @return - Boolean type status indicates the success of operation.
+    
+        The new appended node's key will be stored in Firebase Data object, 
+        which its value can be accessed via function [FirebaseData object].pushName().
+
+   */
+    bool pushTimestamp(FirebaseData &dataObj, const String &path);
+
+    /*
         Set integer data at the defined database path.
 
         @param dataObj - Firebase Data Object to hold data and instances.
@@ -461,6 +476,21 @@ class Firebase_Arduino_WiFi101
 
     */
     bool setJSON(FirebaseData &dataObj, const String &path, const String &jsonString);
+
+    /*
+        Set Firebase server's timestamp to the defined database path.
+
+        @param dataObj - Firebase Data Object to hold data and instances.
+        @param path - Target database path which timestamp will be set.
+
+        @return - Boolean type status indicates the success of operation.
+
+       Call [FirebaseData object].intData will return the integer value of
+       timestamp returned from server.
+
+   */
+
+    bool setTimestamp(FirebaseData &dataObj, const String &path);
 
     /*
         Update child nodes's key or exising key's value (using JSON data) under the defined database path.

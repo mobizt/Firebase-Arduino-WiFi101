@@ -1,14 +1,14 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.1
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.3
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* April 30, 2019
+* June 6, 2019
 * 
 * Feature Added:
-* - Add keywords
+* - Set and push timestamp
 * 
 * Feature Fixed:
 * 
@@ -53,6 +53,7 @@ struct Firebase_Arduino_WiFi101::FirebaseDataType
   static const uint8_t BOOLEAN = 4;
   static const uint8_t STRING = 5;
   static const uint8_t JSON = 6;
+  static const uint8_t TIMESTAMP = 10;
 };
 
 struct Firebase_Arduino_WiFi101::FirebaseMethod
@@ -131,6 +132,16 @@ bool Firebase_Arduino_WiFi101::pushJSON(FirebaseData &dataObj, const String &pat
   return sendRequest(dataObj, path.c_str(), FirebaseMethod::POST, FirebaseDataType::JSON, jsonString.c_str());
 }
 
+bool Firebase_Arduino_WiFi101::pushTimestamp(FirebaseData &dataObj, const String &path)
+{
+  char *tmp = new char[60];
+  strCopy_T(tmp, 113, true);
+
+  bool flag = buildRequest(dataObj, path.c_str(), FirebaseMethod::POST, FirebaseDataType::TIMESTAMP, tmp);
+  delete[] tmp;
+  return flag;
+}
+
 bool Firebase_Arduino_WiFi101::setInt(FirebaseData &dataObj, const String &path, int intValue)
 {
   char *buf = new char[50];
@@ -177,6 +188,16 @@ bool Firebase_Arduino_WiFi101::setJSON(FirebaseData &dataObj, const String &path
 {
   dataObj.queryFilter.clearQuery();
   return sendRequest(dataObj, path.c_str(), FirebaseMethod::PUT, FirebaseDataType::JSON, jsonString.c_str());
+}
+
+bool Firebase_Arduino_WiFi101::setTimestamp(FirebaseData &dataObj, const String &path)
+{
+  char *tmp = new char[60];
+  strCopy_T(tmp, 113, true);
+
+  bool flag = buildRequest(dataObj, path.c_str() ,FirebaseMethod::PUT, FirebaseDataType::TIMESTAMP, tmp);
+  delete[] tmp;
+  return flag;
 }
 
 bool Firebase_Arduino_WiFi101::updateNode(FirebaseData &dataObj, const String path, const String jsonString)
