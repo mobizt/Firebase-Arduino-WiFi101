@@ -1706,9 +1706,15 @@ bool FirebaseData::mismatchDataType()
 {
   return _mismatchDataType;
 }
+
 bool FirebaseData::bufferOverflow()
 {
   return _bufferOverflow;
+}
+
+String FirebaseData::payload()
+{
+  return _data;
 }
 
 String FirebaseData::errorReason()

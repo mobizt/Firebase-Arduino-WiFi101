@@ -969,13 +969,6 @@ class FirebaseData
     bool bufferOverflow();
 
     /*
-
-        Release memory used by Firebase Data object.
-
-    */
-    void end();
-
-    /*
         Return the server's payload data.
 
         @return Payload string (String object).
