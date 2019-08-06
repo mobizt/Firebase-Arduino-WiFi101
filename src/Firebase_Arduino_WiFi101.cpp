@@ -5,12 +5,12 @@
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* June 18, 2019
+* August 7, 2019
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* 
+* - Compile error due to missing firebaseData end() function.
 * 
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
 * and delete calls.

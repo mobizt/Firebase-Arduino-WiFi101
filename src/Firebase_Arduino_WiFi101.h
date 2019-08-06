@@ -5,12 +5,12 @@
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* June 18, 2019
+* August 7, 2019
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* 
+* - Compile error due to missing firebaseData end() function.
 * 
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
 * and delete calls.
@@ -717,7 +717,8 @@ class Firebase_Arduino_WiFi101
 
     void errorToString(int httpCode, char *buf);
 
-  protected:
+
+protected:
     bool sendRequest(FirebaseData &dataObj, const char *path, const uint8_t method, uint8_t dataType, const char *payload);
     void sendFirebaseRequest(FirebaseData &dataObj, const char *host, uint8_t method, const char *path, const char *auth, uint16_t payloadLength);
     bool firebaseConnectStream(FirebaseData &dataObj, const char *path);
@@ -977,7 +978,9 @@ class FirebaseData
 
     QueryFilter queryFilter;
 
-  protected:
+    void end();
+
+protected:
     bool _isStreamTimeout;
     bool _isStream;
     bool _streamStop;
