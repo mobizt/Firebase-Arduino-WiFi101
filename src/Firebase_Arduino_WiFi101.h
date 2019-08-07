@@ -1,5 +1,5 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.5
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.7
 * 
 *
 * This library required WiFi101 Library to be installed.
@@ -978,7 +978,7 @@ class FirebaseData
 
     QueryFilter queryFilter;
 
-    void end();
+    
 
 protected:
     bool _isStreamTimeout;
@@ -1024,6 +1024,8 @@ protected:
     FirebaseHTTPClient _http;
 
     void strCopy_T(char *buf, uint16_t index, bool empty = false, uint16_t size = 0);
+
+    void end();
 
     friend Firebase_Arduino_WiFi101;
 };
