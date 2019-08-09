@@ -1,11 +1,11 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.7
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Development Boards based on WiFi101 library, version 1.0.8
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* August 7, 2019
+* August 9, 2019
 * 
 * Feature Added:
 * 
@@ -956,7 +956,8 @@ EXIT_2:
 
   if (dataObj._httpCode == HTTPC_ERROR_READ_TIMEOUT)
     return false;
-  return dataObj._httpCode == _HTTP_CODE_OK;
+  return dataObj._httpCode == _HTTP_CODE_OK || dataObj._httpCode == -1000;
+  
 
 EXIT_3:
 
