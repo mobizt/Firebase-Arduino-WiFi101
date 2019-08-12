@@ -1,16 +1,16 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.0.8
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.0.9
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* August 9, 2019
+* August 12, 2019
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* - Compile error due to missing firebaseData end() function.
+* - Stream error.
 * 
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
 * and delete calls.
@@ -596,6 +596,10 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
       delay(1);
 
   dataTime = millis();
+
+  if (client.connected() && !client.available())
+    dataObj._httpCode = HTTPC_ERROR_READ_TIMEOUT;
+
   if (client.connected() && client.available())
   {
     while (client.available())
@@ -933,7 +937,7 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
     goto EXIT_2;
   }
 
-  if (dataObj._httpCode == -1000)
+  if (dataObj._httpCode == -1000 && dataObj._r_method == FirebaseMethod::STREAM)
     flag = true;
 
   dataObj._httpConnected = false;
@@ -956,8 +960,7 @@ EXIT_2:
 
   if (dataObj._httpCode == HTTPC_ERROR_READ_TIMEOUT)
     return false;
-  return dataObj._httpCode == _HTTP_CODE_OK || dataObj._httpCode == -1000;
-  
+  return dataObj._httpCode == _HTTP_CODE_OK || (dataObj._r_method == FirebaseMethod::STREAM && dataObj._httpCode == -1000);
 
 EXIT_3:
 
@@ -985,7 +988,7 @@ bool Firebase_Arduino_WiFi101::firebaseConnectStream(FirebaseData &dataObj, cons
 
   dataObj._streamStop = false;
 
-  if (dataObj._isStream && path == dataObj._streamPath)
+  if (!dataObj._isStreamTimeout && dataObj._isStream && path == dataObj._streamPath)
     return true;
 
   if (strlen(path) == 0 || strlen(_host) == 0 || strlen(_auth) == 0)
