@@ -597,8 +597,6 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
 
   dataTime = millis();
 
-  if (client.connected() && !client.available())
-    dataObj._httpCode = HTTPC_ERROR_READ_TIMEOUT;
 
   if (client.connected() && client.available())
   {
@@ -937,7 +935,7 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
     goto EXIT_2;
   }
 
-  if (dataObj._httpCode == -1000 && dataObj._r_method == FirebaseMethod::STREAM)
+  if (dataObj._httpCode == -1000)
     flag = true;
 
   dataObj._httpConnected = false;
@@ -960,7 +958,7 @@ EXIT_2:
 
   if (dataObj._httpCode == HTTPC_ERROR_READ_TIMEOUT)
     return false;
-  return dataObj._httpCode == _HTTP_CODE_OK || (dataObj._r_method == FirebaseMethod::STREAM && dataObj._httpCode == -1000);
+  return dataObj._httpCode == _HTTP_CODE_OK || dataObj._httpCode == -1000;
 
 EXIT_3:
 
