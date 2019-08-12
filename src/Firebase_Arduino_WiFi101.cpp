@@ -935,7 +935,7 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
     goto EXIT_2;
   }
 
-  if (dataObj._httpCode == -1000)
+  if (dataObj._httpCode == -1000 && dataObj._r_method != FirebaseMethod::STREAM)
     flag = true;
 
   dataObj._httpConnected = false;
