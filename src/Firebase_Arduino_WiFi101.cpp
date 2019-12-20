@@ -1,16 +1,16 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.0.9
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.1.0
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* August 12, 2019
+* December 20, 2019
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* - Stream error.
+* - Fix empty data when none POST payload contains name key.
 * 
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
 * and delete calls.
@@ -597,7 +597,6 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
 
   dataTime = millis();
 
-
   if (client.connected() && client.available())
   {
     while (client.available())
@@ -871,20 +870,23 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
         setDataType(dataObj, lineBuf);
 
         //Push (POST) data?
-        strCopy_T(fstr, 20, true, 60);
-        p1 = strpos(lineBuf, fstr, 0);
-        if (p1 != -1)
+        if (dataObj._r_method == FirebaseMethod::POST)
         {
-          strCopy_T(fstr, 3, true, 60);
-          p2 = strpos(lineBuf, fstr, p1 + strlen_P(C_STR_20));
-          if (p2 != -1)
+          strCopy_T(fstr, 20, true, 60);
+          p1 = strpos(lineBuf, fstr, 0);
+          if (p1 != -1)
           {
-            memset(tmp, 0, tempBufSize);
-            strncpy(tmp, lineBuf + p1 + strlen_P(C_STR_20), p2 - p1 - strlen_P(C_STR_20));
-            strCopy(dataObj._pushName, tmp, true, FBDATA_PUSH_NAME_LENGTH);
-            dataObj._dataType = -1;
-            dataObj._dataType2 = -1;
-            memset(dataObj._data, 0, FBDATA_DATA_LENGTH);
+            strCopy_T(fstr, 3, true, 60);
+            p2 = strpos(lineBuf, fstr, p1 + strlen_P(C_STR_20));
+            if (p2 != -1)
+            {
+              memset(tmp, 0, tempBufSize);
+              strncpy(tmp, lineBuf + p1 + strlen_P(C_STR_20), p2 - p1 - strlen_P(C_STR_20));
+              strCopy(dataObj._pushName, tmp, true, FBDATA_PUSH_NAME_LENGTH);
+              dataObj._dataType = 0;
+              dataObj._dataType2 = 0;
+              memset(dataObj._data, 0, FBDATA_DATA_LENGTH);
+            }
           }
         }
       }
@@ -899,8 +901,8 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
           memset(dataObj._path, 0, FBDATA_PATH_LENGTH);
           memset(dataObj._data, 0, FBDATA_DATA_LENGTH);
           memset(dataObj._pushName, 0, FBDATA_PUSH_NAME_LENGTH);
-          dataObj._dataType = -1;
-          dataObj._dataType2 = -1;
+          dataObj._dataType = 0;
+          dataObj._dataType2 = 0;
           dataObj._dataAvailable = false;
         }
       }
