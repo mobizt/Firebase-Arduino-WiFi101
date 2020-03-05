@@ -1,11 +1,13 @@
 /*
- * HTTP Client Wrapper based on WiFi101 library, version 1.0.0
+ * HTTP Client Wrapper based on WiFi101 library, version 1.0.1
  *
  * 
  * This library required WiFi101 Library to be installed.
  * https://github.com/arduino-libraries/WiFi101
  * 
- * April 29, 2019
+ * March 5, 2020
+ * 
+ * 
  * 
  * The MIT License (MIT)
  * Copyright (c) 2019 K. Suwatchai (Mobizt)
@@ -34,7 +36,6 @@
 
 #include "Firebase_Arduino_WiFi101_HTTPClient.h"
 
-
 FirebaseHTTPClient::FirebaseHTTPClient()
 {
 }
@@ -46,8 +47,7 @@ FirebaseHTTPClient::~FirebaseHTTPClient()
 
 bool FirebaseHTTPClient::http_begin(const char *host, uint16_t port)
 {
-  memset(_host, 0, _HOST_LENGTH);
-  strcat(_host, host);
+  _host = host;
   _port = port;
   return true;
 }
@@ -58,7 +58,7 @@ bool FirebaseHTTPClient::http_connected()
 }
 
 bool FirebaseHTTPClient::http_sendHeader(const char *header)
-{ 
+{
   if (!http_connected())
     return false;
   client.print(header);
@@ -86,7 +86,7 @@ bool FirebaseHTTPClient::http_connect(void)
     return true;
   }
 
-  if (!client.connect(_host, _port))
+  if (!client.connect(_host.c_str(), _port))
     return false;
   return http_connected();
 }

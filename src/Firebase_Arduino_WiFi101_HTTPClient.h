@@ -1,11 +1,13 @@
 /*
- * HTTP Client Wrapper based on WiFi101 librarys, version 1.0.0
+ * HTTP Client Wrapper based on WiFi101 librarys, version 1.0.1
  *
  * 
  * This library required WiFi101 Library to be installed.
  * https://github.com/arduino-libraries/WiFi101
  * 
- * April 29, 2019
+ * March 5, 2020
+ * 
+ * 
  * 
  * The MIT License (MIT)
  * Copyright (c) 2019 K. Suwatchai (Mobizt)
@@ -102,7 +104,7 @@ public:
 protected:
     bool http_connect(void);
     bool http_sendHeader(const char *header);
-    char *_host = new char[_HOST_LENGTH];
+    String _host = "";
     uint16_t _port = 0;
 };
 
