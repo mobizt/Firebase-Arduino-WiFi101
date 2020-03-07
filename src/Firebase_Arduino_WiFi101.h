@@ -1,16 +1,17 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.1.1
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.1.2
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* March 5, 2020
+* March 8, 2020
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* - Use dynamic memory and code optimization.
+* - No stream event triggering bug when the child node value of parent node changes.
+* - FirebaseJson and FirebaseJsonArray data are not assigned when reading from the stream.
 *
 *
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
@@ -961,7 +962,6 @@ private:
     uint8_t _r_dataType;
 
     String _path = "";
-    String _path2 = "";
     String _data = "";
     String _data2 = "";
     String _streamPath = "";

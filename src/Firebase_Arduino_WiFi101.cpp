@@ -1,16 +1,17 @@
 /*
-* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.1.1
+* Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.1.2
 * 
 *
 * This library required WiFi101 Library to be installed.
 * https://github.com/arduino-libraries/WiFi101
 * 
-* March 5, 2020
+* March 8, 2020
 * 
 * Feature Added:
 * 
 * Feature Fixed:
-* - Use dynamic memory and code optimization.
+* - No stream event triggering bug when the child node value of parent node changes.
+* - FirebaseJson and FirebaseJsonArray data are not assigned when reading from the stream.
 *
 *
 * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
@@ -800,6 +801,7 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
           if (m)
           {
             dataObj._eventType = eventType;
+            bool samePath = true;
 
             //Parses json response for path
             tmp = getPGMString(C_STR_17);
@@ -814,6 +816,7 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
               {
                 tmp = newPtr(p2 - p1 - strlen_P(C_STR_17));
                 strncpy(tmp, lineBuf + p1 + strlen_P(C_STR_17), p2 - p1 - strlen_P(C_STR_17));
+                samePath = strcmp(tmp, dataObj._path.c_str()) == 0;
                 dataObj._path = tmp;
                 delPtr(tmp);
               }
@@ -832,17 +835,13 @@ bool Firebase_Arduino_WiFi101::getServerResponse(FirebaseData &dataObj)
 
               setDataType(dataObj, dataObj._data.c_str());
 
-              bool samePath = dataObj._path == dataObj._path2;
-              bool rootPath = dataObj._path = "/";
-              bool emptyPath = dataObj._path2 == "";
               bool sameData = dataObj._data == dataObj._data2;
 
               //Any stream update?
-              if ((!samePath && (!rootPath || emptyPath)) || (samePath && !sameData && !dataObj._streamPathChanged))
+              if (!samePath || (samePath && !sameData && !dataObj._streamPathChanged))
               {
                 dataObj._streamDataChanged = true;
                 dataObj._data2 = dataObj._data;
-                dataObj._path2 = dataObj._path;
               }
               else
                 dataObj._streamDataChanged = false;
@@ -1301,7 +1300,6 @@ bool Firebase_Arduino_WiFi101::cancelCurrentResponse(FirebaseData &dataObj)
   dataObj._streamDataChanged = false;
   dataObj._dataMillis = millis();
   dataObj._data2 = "";
-  dataObj._path2 = "";
   dataObj._dataAvailable = false;
   dataObj._isStreamTimeout = false;
   dataObj._httpCode = HTTPC_ERROR_CONNECTION_REFUSED;
@@ -1583,7 +1581,6 @@ FirebaseData::~FirebaseData()
 void FirebaseData::end()
 {
   _path = "";
-  _path2 = "";
   _data = "";
   _data2 = "";
   _streamPath = "";
