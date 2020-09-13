@@ -4,10 +4,14 @@
 Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards 
 based on WiFi101 library, v 1.1.2
 
-This client library provides the most reliable operations for read, store, update Firebase RTDB through REST API.
+This client library provides the most reliable operations for read, store, and update the Firebase RTDB through the REST API.
 
 
-The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards. 
+The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards.
+
+Due to the different of platform's available memory, flash size, and WiFiClient functionalities which required the performance and memory optimization rather than the compatibility viewpoint of the standard Arduino WiFiClient function, the Firebase libraries will be fine tuned for different WiFi capable platforms.
+
+Other WiFi-Serial bridge libraries and similar firmware that claim to be working with WiFi are not highly recommended due to lack of required functions based on the core SSL/TLS provider.
 
 For Espressif MCUs, please try [ESP8266 Firebase Arduino library]( https://github.com/mobizt/Firebase-ESP8266) and [ESP32 Firebase Arduino library]( https://github.com/mobizt/Firebase-ESP32)
 
