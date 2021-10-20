@@ -1,16 +1,15 @@
-
 /**
- * Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.2.0
+ * Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards based on WiFi101 library, version 1.2.1
  * 
  * This library required WiFi101 Library to be installed.
  * https://github.com/arduino-libraries/WiFi101
  * 
- * Created: October 19, 2021
+ * Created: October 20, 2021
  * 
  * Feature Added:
- * - Add support 64-bit signed and unsigned integer.
  * 
  * Feature Fixed:
+ * - Fix missing file.
  * 
  * 
  * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update 
