@@ -2,7 +2,7 @@
 
 
 Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards 
-based on WiFi101 library, v 1.2.2
+based on WiFi101 library, v 1.2.3
 
 This client library provides the most reliable operations for read, store, and update the Firebase RTDB through the REST API.
 

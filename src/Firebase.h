@@ -1,8 +1,8 @@
 /**
- * Firebase.h, version 1.0.1
+ * Firebase.h, version 1.0.2
  * 
  * 
- * Created: October 20, 2021
+ * Created: November 10, 2021
  * 
  * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
  * and delete calls.
@@ -45,7 +45,6 @@
 #else
 #error Architecture or board not supported.
 #endif
-
 #define FIEBASE_PORT 443
 #define FIREBASE_RESPONSE_SIZE 400
 #define KEEP_ALIVE_TIMEOUT 30000
@@ -673,7 +672,8 @@ private:
     char *newS(char *p, size_t len, char *d);
     char *strP(PGM_P pgm);
     void strP(char *buf, PGM_P pgm, bool empty = false);
-
+    unsigned long long wstrtoull(const char *s);
+    long long wstrtoll(const char *s);
     void sendHeader(FirebaseData &fbdo, const char *host, uint8_t _method, const char *path, const char *auth, uint16_t payloadLength);
     void resetFirebasedataFlag(FirebaseData &fbdo);
     bool handleNetClientNotConnected(FirebaseData &fbdo);
@@ -738,6 +738,8 @@ private:
      * License along with this library; if not, write to the Free Software
      * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     */
+
+#if defined(__arm__)
 
     char *dtostrf(double val, signed char width, unsigned char prec, char *sout)
     {
@@ -838,6 +840,8 @@ private:
 
         return sout;
     }
+
+#endif
 
     void init(size_t sz)
     {
