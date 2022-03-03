@@ -1,12 +1,10 @@
 # Firebase RTDB Arduino Client for ARM/AVR WIFI Dev Boards
 
+![](/media/images/flag.svg)
 
 Google's Firebase Realtime Database Arduino Library based on WiFi101 library, v1.2.5.
 
-![](/media/images/flag.svg)
-
 The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards.
-
 
 
 For other devices with larger memory and flash space, please try
