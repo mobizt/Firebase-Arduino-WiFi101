@@ -1,5 +1,5 @@
 /*
- * Firebase TCP Client library, version 1.0.0
+ * Firebase TCP Client library, version 1.0.1
  *
  *
  * Created: March 3, 2022
@@ -105,6 +105,8 @@ void Firebase_TCP_Client::close()
     }
     client.stop();
   }
+
+  host.remove(0, host.length());
 }
 
 #endif

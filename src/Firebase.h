@@ -1,5 +1,5 @@
 /**
- * Firebase.h, version 1.0.3
+ * Firebase.h, version 1.0.4
  *
  *
  * Created: March 3, 2022
