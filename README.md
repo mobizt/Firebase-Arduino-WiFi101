@@ -3,6 +3,7 @@
 
 Google's Firebase Realtime Database Arduino Library based on WiFi101 library, v1.2.5.
 
+![](/media/images/flag.svg)
 
 The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards.
 
