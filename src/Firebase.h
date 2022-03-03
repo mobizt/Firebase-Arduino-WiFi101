@@ -1,42 +1,37 @@
 /**
- * Firebase.h, version 1.0.2
- * 
- * 
- * Created: November 10, 2021
- * 
- * This library provides ARM/AVR WIFI Development Boards to perform REST API by GET PUT, POST, PATCH, DELETE data from/to with Google's Firebase database using get, set, update
- * and delete calls.
- * 
- * The library was test and work well with ESP32s based module and add support for multiple stream event path.
- * 
+ * Firebase.h, version 1.0.3
+ *
+ *
+ * Created: March 3, 2022
+ *
  * The MIT License (MIT)
- * Copyright (c) 2021 K. Suwatchai (Mobizt)
- * 
- * 
+ * Copyright (c) 2022 K. Suwatchai (Mobizt)
+ *
+ *
  * Permission is hereby granted, free of charge, to any person returning a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
+ */
 
 #ifndef Firebase_Arduino_WiFi_H
 #define Firebase_Arduino_WiFi_H
 
 #include <Arduino.h>
 
-#include "WCS.h"
+#include "Firebase_TCP_Client.h"
 
 #include <avr/pgmspace.h>
 #if defined(__arm__)
@@ -46,112 +41,116 @@
 #error Architecture or board not supported.
 #endif
 #define FIEBASE_PORT 443
-#define FIREBASE_RESPONSE_SIZE 400
-#define KEEP_ALIVE_TIMEOUT 30000
+#if defined(__arm__)
+#define FIREBASE_RESPONSE_SIZE 4096
+#elif defined(__AVR__)
+#define FIREBASE_RESPONSE_SIZE 512
+#endif
+#define KEEP_ALIVE_TIMEOUT 40000
 
-const char C_STR_0[] PROGMEM = "{\".sv\": \"timestamp\"}";
-const char C_STR_1[] PROGMEM = "/";
-const char C_STR_2[] PROGMEM = ".json?auth=";
-const char C_STR_3[] PROGMEM = "\"";
-const char C_STR_4[] PROGMEM = ".";
-const char C_STR_5[] PROGMEM = "HTTP/1.1 ";
-const char C_STR_6[] PROGMEM = " ";
-const char C_STR_7[] PROGMEM = ":";
-const char C_STR_8[] PROGMEM = "Content-Type: ";
-const char C_STR_9[] PROGMEM = "text/event-stream";
-const char C_STR_10[] PROGMEM = "Connection: ";
-const char C_STR_11[] PROGMEM = "keep-alive";
-const char C_STR_12[] PROGMEM = "Content-Length: ";
-const char C_STR_13[] PROGMEM = "event: ";
-const char C_STR_14[] PROGMEM = "data: ";
-const char C_STR_15[] PROGMEM = "put";
-const char C_STR_16[] PROGMEM = "patch";
-const char C_STR_17[] PROGMEM = "\"path\":\"";
-const char C_STR_18[] PROGMEM = "\"data\":";
-const char C_STR_19[] PROGMEM = "null";
-const char C_STR_20[] PROGMEM = "{\"name\":\"";
-const char C_STR_21[] PROGMEM = "\r\n";
-const char C_STR_22[] PROGMEM = "GET ";
-const char C_STR_23[] PROGMEM = "PUT";
-const char C_STR_24[] PROGMEM = "POST";
-const char C_STR_25[] PROGMEM = "GET";
-const char C_STR_26[] PROGMEM = "PATCH";
-const char C_STR_27[] PROGMEM = "DELETE";
-const char C_STR_28[] PROGMEM = "&download=";
-const char C_STR_29[] PROGMEM = "&print=silent";
-const char C_STR_30[] PROGMEM = " HTTP/1.1\r\n";
-const char C_STR_31[] PROGMEM = "Host: ";
-const char C_STR_32[] PROGMEM = "User-Agent: UNO WiFi\r\n";
-const char C_STR_34[] PROGMEM = "Connection: close\r\n";
-const char C_STR_35[] PROGMEM = "Accept: text/event-stream\r\n";
-const char C_STR_36[] PROGMEM = "Connection: keep-alive\r\n";
-const char C_STR_37[] PROGMEM = "Keep-Alive: timeout=30, max=100\r\n";
-const char C_STR_38[] PROGMEM = "Accept-Encoding: identity;q=1,chunked;q=0.1,*;q=0\r\n";
-const char C_STR_39[] PROGMEM = "connection refused";
-const char C_STR_40[] PROGMEM = "send data failed";
-const char C_STR_41[] PROGMEM = "int64";
-const char C_STR_42[] PROGMEM = "not connected";
-const char C_STR_43[] PROGMEM = "connection lost";
-const char C_STR_44[] PROGMEM = "no HTTP server";
-const char C_STR_45[] PROGMEM = "bad request";
-const char C_STR_46[] PROGMEM = "non-authoriative information";
-const char C_STR_47[] PROGMEM = "no content";
-const char C_STR_48[] PROGMEM = "moved permanently";
-const char C_STR_49[] PROGMEM = "use proxy";
-const char C_STR_50[] PROGMEM = "temporary redirect";
-const char C_STR_51[] PROGMEM = "permanent redirect";
-const char C_STR_52[] PROGMEM = "unauthorized";
-const char C_STR_53[] PROGMEM = "forbidden";
-const char C_STR_54[] PROGMEM = "not found";
-const char C_STR_55[] PROGMEM = "method not allow";
-const char C_STR_56[] PROGMEM = "not acceptable";
-const char C_STR_57[] PROGMEM = "proxy authentication required";
-const char C_STR_58[] PROGMEM = "request timeout";
-const char C_STR_59[] PROGMEM = "length required";
-const char C_STR_60[] PROGMEM = "too many requests";
-const char C_STR_61[] PROGMEM = "request header fields too larg";
-const char C_STR_62[] PROGMEM = "internal server error";
-const char C_STR_63[] PROGMEM = "bad gateway";
-const char C_STR_64[] PROGMEM = "service unavailable";
-const char C_STR_65[] PROGMEM = "gateway timeout";
-const char C_STR_66[] PROGMEM = "http version not support";
-const char C_STR_67[] PROGMEM = "network authentication required";
-const char C_STR_68[] PROGMEM = "data buffer overflow";
-const char C_STR_69[] PROGMEM = "read Timeout";
-const char C_STR_70[] PROGMEM = "data type mismatch";
-const char C_STR_71[] PROGMEM = "path not exist";
-const char C_STR_72[] PROGMEM = "task";
-const char C_STR_73[] PROGMEM = "/esp.32";
-const char C_STR_74[] PROGMEM = "json";
-const char C_STR_75[] PROGMEM = "string";
-const char C_STR_76[] PROGMEM = "float";
-const char C_STR_77[] PROGMEM = "int";
-const char C_STR_78[] PROGMEM = "null";
-const char C_STR_79[] PROGMEM = ";";
-const char C_STR_80[] PROGMEM = "Content-Disposition: ";
-const char C_STR_81[] PROGMEM = "application/octet-stream";
-const char C_STR_82[] PROGMEM = "attachment";
-const char C_STR_83[] PROGMEM = "auth_revoked";
-const char C_STR_84[] PROGMEM = "cancel";
-const char C_STR_85[] PROGMEM = "true";
-const char C_STR_86[] PROGMEM = "e";
-const char C_STR_87[] PROGMEM = "false";
-const char C_STR_88[] PROGMEM = "Node path is not exist";
-const char C_STR_89[] PROGMEM = ".json";
-const char C_STR_90[] PROGMEM = "/root.json";
-const char C_STR_91[] PROGMEM = "boolean";
-const char C_STR_92[] PROGMEM = "double";
-const char C_STR_93[] PROGMEM = "uint64";
-const char C_STR_94[] PROGMEM = "http connection was used by other process";
-const char C_STR_95[] PROGMEM = "Location: ";
-const char C_STR_96[] PROGMEM = "&orderBy=";
-const char C_STR_97[] PROGMEM = "&limitToFirst=";
-const char C_STR_98[] PROGMEM = "&limitToLast=";
-const char C_STR_99[] PROGMEM = "&startAt=";
-const char C_STR_100[] PROGMEM = "&endAt=";
-const char C_STR_101[] PROGMEM = "&equalTo=";
-const char C_STR_102[] PROGMEM = "\"error\" : ";
-const char C_STR_103[] PROGMEM = "array";
+const char fb_esp_pgm_str_0[] PROGMEM = "{\".sv\": \"timestamp\"}";
+const char fb_esp_pgm_str_1[] PROGMEM = "/";
+const char fb_esp_pgm_str_2[] PROGMEM = ".json?auth=";
+const char fb_esp_pgm_str_3[] PROGMEM = "\"";
+const char fb_esp_pgm_str_4[] PROGMEM = ".";
+const char fb_esp_pgm_str_5[] PROGMEM = "HTTP/1.1 ";
+const char fb_esp_pgm_str_6[] PROGMEM = " ";
+const char fb_esp_pgm_str_7[] PROGMEM = ":";
+const char fb_esp_pgm_str_8[] PROGMEM = "Content-Type: ";
+const char fb_esp_pgm_str_9[] PROGMEM = "text/event-stream";
+const char fb_esp_pgm_str_10[] PROGMEM = "Connection: ";
+const char fb_esp_pgm_str_11[] PROGMEM = "keep-alive";
+const char fb_esp_pgm_str_12[] PROGMEM = "Content-Length: ";
+const char fb_esp_pgm_str_13[] PROGMEM = "event: ";
+const char fb_esp_pgm_str_14[] PROGMEM = "data: ";
+const char fb_esp_pgm_str_15[] PROGMEM = "put";
+const char fb_esp_pgm_str_16[] PROGMEM = "patch";
+const char fb_esp_pgm_str_17[] PROGMEM = "\"path\":\"";
+const char fb_esp_pgm_str_18[] PROGMEM = "\"data\":";
+const char fb_esp_pgm_str_19[] PROGMEM = "null";
+const char fb_esp_pgm_str_20[] PROGMEM = "{\"name\":\"";
+const char fb_esp_pgm_str_21[] PROGMEM = "\r\n";
+const char fb_esp_pgm_str_22[] PROGMEM = "GET ";
+const char fb_esp_pgm_str_23[] PROGMEM = "PUT";
+const char fb_esp_pgm_str_24[] PROGMEM = "POST";
+const char fb_esp_pgm_str_25[] PROGMEM = "GET";
+const char fb_esp_pgm_str_26[] PROGMEM = "PATCH";
+const char fb_esp_pgm_str_27[] PROGMEM = "DELETE";
+const char fb_esp_pgm_str_28[] PROGMEM = "&download=";
+const char fb_esp_pgm_str_29[] PROGMEM = "&print=silent";
+const char fb_esp_pgm_str_30[] PROGMEM = " HTTP/1.1\r\n";
+const char fb_esp_pgm_str_31[] PROGMEM = "Host: ";
+const char fb_esp_pgm_str_32[] PROGMEM = "User-Agent: UNO WiFi\r\n";
+const char fb_esp_pgm_str_34[] PROGMEM = "Connection: close\r\n";
+const char fb_esp_pgm_str_35[] PROGMEM = "Accept: text/event-stream\r\n";
+const char fb_esp_pgm_str_36[] PROGMEM = "Connection: keep-alive\r\n";
+const char fb_esp_pgm_str_37[] PROGMEM = "Keep-Alive: timeout=30, max=100\r\n";
+const char fb_esp_pgm_str_38[] PROGMEM = "Accept-Encoding: identity;q=1,chunked;q=0.1,*;q=0\r\n";
+const char fb_esp_pgm_str_39[] PROGMEM = "connection refused";
+const char fb_esp_pgm_str_40[] PROGMEM = "send data failed";
+const char fb_esp_pgm_str_41[] PROGMEM = "int64";
+const char fb_esp_pgm_str_42[] PROGMEM = "not connected";
+const char fb_esp_pgm_str_43[] PROGMEM = "connection lost";
+const char fb_esp_pgm_str_44[] PROGMEM = "no HTTP server";
+const char fb_esp_pgm_str_45[] PROGMEM = "bad request";
+const char fb_esp_pgm_str_46[] PROGMEM = "non-authoriative information";
+const char fb_esp_pgm_str_47[] PROGMEM = "no content";
+const char fb_esp_pgm_str_48[] PROGMEM = "moved permanently";
+const char fb_esp_pgm_str_49[] PROGMEM = "use proxy";
+const char fb_esp_pgm_str_50[] PROGMEM = "temporary redirect";
+const char fb_esp_pgm_str_51[] PROGMEM = "permanent redirect";
+const char fb_esp_pgm_str_52[] PROGMEM = "unauthorized";
+const char fb_esp_pgm_str_53[] PROGMEM = "forbidden";
+const char fb_esp_pgm_str_54[] PROGMEM = "not found";
+const char fb_esp_pgm_str_55[] PROGMEM = "method not allow";
+const char fb_esp_pgm_str_56[] PROGMEM = "not acceptable";
+const char fb_esp_pgm_str_57[] PROGMEM = "proxy authentication required";
+const char fb_esp_pgm_str_58[] PROGMEM = "request timeout";
+const char fb_esp_pgm_str_59[] PROGMEM = "length required";
+const char fb_esp_pgm_str_60[] PROGMEM = "too many requests";
+const char fb_esp_pgm_str_61[] PROGMEM = "request header fields too larg";
+const char fb_esp_pgm_str_62[] PROGMEM = "internal server error";
+const char fb_esp_pgm_str_63[] PROGMEM = "bad gateway";
+const char fb_esp_pgm_str_64[] PROGMEM = "service unavailable";
+const char fb_esp_pgm_str_65[] PROGMEM = "gateway timeout";
+const char fb_esp_pgm_str_66[] PROGMEM = "http version not support";
+const char fb_esp_pgm_str_67[] PROGMEM = "network authentication required";
+const char fb_esp_pgm_str_68[] PROGMEM = "data buffer overflow";
+const char fb_esp_pgm_str_69[] PROGMEM = "read Timeout";
+const char fb_esp_pgm_str_70[] PROGMEM = "data type mismatch";
+const char fb_esp_pgm_str_71[] PROGMEM = "path not exist";
+const char fb_esp_pgm_str_72[] PROGMEM = "task";
+const char fb_esp_pgm_str_73[] PROGMEM = "/esp.32";
+const char fb_esp_pgm_str_74[] PROGMEM = "json";
+const char fb_esp_pgm_str_75[] PROGMEM = "string";
+const char fb_esp_pgm_str_76[] PROGMEM = "float";
+const char fb_esp_pgm_str_77[] PROGMEM = "int";
+const char fb_esp_pgm_str_78[] PROGMEM = "null";
+const char fb_esp_pgm_str_79[] PROGMEM = ";";
+const char fb_esp_pgm_str_80[] PROGMEM = "Content-Disposition: ";
+const char fb_esp_pgm_str_81[] PROGMEM = "application/octet-stream";
+const char fb_esp_pgm_str_82[] PROGMEM = "attachment";
+const char fb_esp_pgm_str_83[] PROGMEM = "auth_revoked";
+const char fb_esp_pgm_str_84[] PROGMEM = "cancel";
+const char fb_esp_pgm_str_85[] PROGMEM = "true";
+const char fb_esp_pgm_str_86[] PROGMEM = "e";
+const char fb_esp_pgm_str_87[] PROGMEM = "false";
+const char fb_esp_pgm_str_88[] PROGMEM = "Node path is not exist";
+const char fb_esp_pgm_str_89[] PROGMEM = ".json";
+const char fb_esp_pgm_str_90[] PROGMEM = "/root.json";
+const char fb_esp_pgm_str_91[] PROGMEM = "boolean";
+const char fb_esp_pgm_str_92[] PROGMEM = "double";
+const char fb_esp_pgm_str_93[] PROGMEM = "uint64";
+const char fb_esp_pgm_str_94[] PROGMEM = "http connection was used by other process";
+const char fb_esp_pgm_str_95[] PROGMEM = "Location: ";
+const char fb_esp_pgm_str_96[] PROGMEM = "&orderBy=";
+const char fb_esp_pgm_str_97[] PROGMEM = "&limitToFirst=";
+const char fb_esp_pgm_str_98[] PROGMEM = "&limitToLast=";
+const char fb_esp_pgm_str_99[] PROGMEM = "&startAt=";
+const char fb_esp_pgm_str_100[] PROGMEM = "&endAt=";
+const char fb_esp_pgm_str_101[] PROGMEM = "&equalTo=";
+const char fb_esp_pgm_str_102[] PROGMEM = "\"error\" : ";
+const char fb_esp_pgm_str_103[] PROGMEM = "array";
 class FirebaseData;
 class Firebase_Class;
 
@@ -179,12 +178,12 @@ public:
     friend Firebase_Class;
 
 private:
-    String _orderBy = "";
-    String _limitToFirst = "";
-    String _limitToLast = "";
-    String _startAt = "";
-    String _endAt = "";
-    String _equalTo = "";
+    String _orderBy;
+    String _limitToFirst;
+    String _limitToLast;
+    String _startAt;
+    String _endAt;
+    String _equalTo;
 };
 
 class Firebase_Class
@@ -658,28 +657,29 @@ public:
     char *errorToString(int httpCode);
 
 private:
+    void clearStr(String &s);
     bool sendRequest(FirebaseData &fbdo, const char *path, const uint8_t method, uint8_t dataType, const char *payload);
     void buildFirebaseRequest(String &req, FirebaseData &fbdo, const char *host, uint8_t method, const char *path, const char *auth, int payloadLength);
-    bool firebaseConnectStream(FirebaseData &fbdo, const char *path);
-    bool getServerStreamResponse(FirebaseData &fbdo);
-    bool getServerResponse(FirebaseData &fbdo);
+    bool connectStream(FirebaseData &fbdo, const char *path);
+    bool handleStream(FirebaseData &fbdo);
+    uint16_t calCRC(const char *buf);
+    void getHeader(const char *buf, String &out, PGM_P hdr);
+    int strposP(const char *haystack, PGM_P needle, int index = 0);
+    bool handleResponse(FirebaseData &fbdo);
     bool reconnect();
     bool reconnect(FirebaseData &fbdo);
 
-    void delS(char *p);
-    char *newS(size_t len);
-    char *newS(char *p, size_t len);
-    char *newS(char *p, size_t len, char *d);
+    void delP(char *p);
+    char *newP(size_t len);
     char *strP(PGM_P pgm);
-    void strP(char *buf, PGM_P pgm, bool empty = false);
+    void appendP(char *buf, PGM_P pgm, bool empty = false);
     unsigned long long wstrtoull(const char *s);
     long long wstrtoll(const char *s);
     void sendHeader(FirebaseData &fbdo, const char *host, uint8_t _method, const char *path, const char *auth, uint16_t payloadLength);
-    void resetFirebasedataFlag(FirebaseData &fbdo);
-    bool handleNetClientNotConnected(FirebaseData &fbdo);
-    void forceEndHTTP(FirebaseData &fbdo);
-    int firebaseConnect(FirebaseData &fbdo, const char *path, const uint8_t method, uint8_t dataType, const char *payload);
-    bool cancelCurrentResponse(FirebaseData &fbdo);
+    void clearFlag(FirebaseData &fbdo);
+    void closeTCP(FirebaseData &fbdo);
+    void setQuery(FirebaseData &fbdo, QueryFilter &query);
+    int connect(FirebaseData &fbdo, const char *path, const uint8_t method, uint8_t dataType, const char *payload);
     void setDataType(FirebaseData &fbdo, const char *data);
     void autoConnectWiFi();
     bool apConnected(FirebaseData &fbdo);
@@ -691,10 +691,10 @@ private:
     int strpos(const char *haystack, const char *needle, int offset);
     int rstrpos(const char *haystack, const char *needle, int offset);
 
-    String _host = "";
-    String _auth = "";
-    String _ssid = "";
-    String _psw = "";
+    String _host;
+    String _auth;
+    String _ssid;
+    String _psw;
     uint16_t _port;
     bool _reconnectWiFi;
     unsigned long _lastReconnectMillis = 0;
@@ -714,7 +714,7 @@ public:
     NumToString(bool value) { boolStr(value); }
     NumToString(float value, int precision = 5) { floatStr(value, precision); }
     NumToString(double value, int precision = 9) { doubleStr(value, precision); }
-    ~NumToString() { delS(buf); }
+    ~NumToString() { delP(buf); }
     const char *get() const { return buf; }
 
 private:
@@ -739,124 +739,124 @@ private:
      * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
     */
 
-#if defined(__arm__)
+    #if defined (__arm__)
 
-    char *dtostrf(double val, signed char width, unsigned char prec, char *sout)
-    {
-        //Commented code is the original version
-        /***
+        char *dtostrf(double val, signed char width, unsigned char prec, char *sout)
+        {
+            //Commented code is the original version
+            /***
           char fmt[20];
           sprintf(fmt, "%%%d.%df", width, prec);
           sprintf(sout, fmt, val);
           return sout;
         */
 
-        // Handle negative numbers
-        uint8_t negative = 0;
-        if (val < 0.0)
-        {
-            negative = 1;
-            val = -val;
-        }
-
-        // Round correctly so that print(1.999, 2) prints as "2.00"
-        double rounding = 0.5;
-        for (int i = 0; i < prec; ++i)
-        {
-            rounding /= 10.0;
-        }
-
-        val += rounding;
-
-        // Extract the integer part of the number
-        unsigned long int_part = (unsigned long)val;
-        double remainder = val - (double)int_part;
-
-        if (prec > 0)
-        {
-            // Extract digits from the remainder
-            unsigned long dec_part = 0;
-            double decade = 1.0;
-            for (int i = 0; i < prec; i++)
+            // Handle negative numbers
+            uint8_t negative = 0;
+            if (val < 0.0)
             {
-                decade *= 10.0;
+                negative = 1;
+                val = -val;
             }
-            remainder *= decade;
-            dec_part = (int)remainder;
 
-            if (negative)
+            // Round correctly so that print(1.999, 2) prints as "2.00"
+            double rounding = 0.5;
+            for (int i = 0; i < prec; ++i)
             {
-                sprintf(sout, "-%ld.%0*ld", int_part, prec, dec_part);
+                rounding /= 10.0;
             }
-            else
+
+            val += rounding;
+
+            // Extract the integer part of the number
+            unsigned long int_part = (unsigned long)val;
+            double remainder = val - (double)int_part;
+
+            if (prec > 0)
             {
-                sprintf(sout, "%ld.%0*ld", int_part, prec, dec_part);
-            }
-        }
-        else
-        {
-            if (negative)
-            {
-                sprintf(sout, "-%ld", int_part);
+                // Extract digits from the remainder
+                unsigned long dec_part = 0;
+                double decade = 1.0;
+                for (int i = 0; i < prec; i++)
+                {
+                    decade *= 10.0;
+                }
+                remainder *= decade;
+                dec_part = (int)remainder;
+
+                if (negative)
+                {
+                    sprintf(sout, "-%ld.%0*ld", int_part, prec, dec_part);
+                }
+                else
+                {
+                    sprintf(sout, "%ld.%0*ld", int_part, prec, dec_part);
+                }
             }
             else
             {
-                sprintf(sout, "%ld", int_part);
+                if (negative)
+                {
+                    sprintf(sout, "-%ld", int_part);
+                }
+                else
+                {
+                    sprintf(sout, "%ld", int_part);
+                }
             }
-        }
-        // Handle minimum field width of the output string
-        // width is signed value, negative for left adjustment.
-        // Range -128,127
-        char fmt[129] = "";
-        unsigned int w = width;
-        if (width < 0)
-        {
-            negative = 1;
-            w = -width;
-        }
-        else
-        {
-            negative = 0;
-        }
-
-        if (strlen(sout) < w)
-        {
-            memset(fmt, ' ', 128);
-            fmt[w - strlen(sout)] = '\0';
-            if (negative == 0)
+            // Handle minimum field width of the output string
+            // width is signed value, negative for left adjustment.
+            // Range -128,127
+            char fmt[129] = "";
+            unsigned int w = width;
+            if (width < 0)
             {
-                char *tmp = (char *)malloc(strlen(sout) + 1);
-                strcpy(tmp, sout);
-                strcpy(sout, fmt);
-                strcat(sout, tmp);
-                free(tmp);
+                negative = 1;
+                w = -width;
             }
             else
             {
-                // left adjustment
-                strcat(sout, fmt);
+                negative = 0;
             }
+
+            if (strlen(sout) < w)
+            {
+                memset(fmt, ' ', 128);
+                fmt[w - strlen(sout)] = '\0';
+                if (negative == 0)
+                {
+                    char *tmp = (char *)malloc(strlen(sout) + 1);
+                    strcpy(tmp, sout);
+                    strcpy(sout, fmt);
+                    strcat(sout, tmp);
+                    free(tmp);
+                }
+                else
+                {
+                    // left adjustment
+                    strcat(sout, fmt);
+                }
+            }
+
+            return sout;
         }
 
-        return sout;
-    }
-
-#endif
+    #endif
 
     void init(size_t sz)
     {
-        delS(buf);
-        buf = newS(sz + 1);
+        delP(buf);
+        buf = newP(sz + 1);
     }
 
-    char *newS(size_t len)
+    char *newP(size_t len)
     {
         char *p = new char[len];
         memset(p, 0, len);
         return p;
     }
 
-    void delS(char *p)
+    void delP(char *p)
     {
         if (p != nullptr)
             delete[] p;
@@ -865,7 +865,7 @@ private:
 
     char *intStr(int value)
     {
-        char *t = newS(36);
+        char *t = newP(36);
         sprintf(t, "%d", value);
         return t;
     }
@@ -902,20 +902,20 @@ private:
     void int64Str(long long value)
     {
         init(128);
-        char *in = newS(128);
+        char *in = newP(128);
         unsigned long long v = (value < 0) ? value * -1 : value;
         char *out = ullToString(in, v, value < 0);
         strcpy(buf, out);
-        delS(in);
+        delP(in);
     }
 
     void uint64Str(unsigned long long value)
     {
         init(128);
-        char *in = newS(128);
+        char *in = newP(128);
         char *out = ullToString(in, value, false);
         strcpy(buf, out);
-        delS(in);
+        delP(in);
     }
 
     void boolStr(bool value)
@@ -1130,49 +1130,55 @@ public:
     */
     String payload();
 
+    /**
+     * Clear internal memory included payload without closing the TCP connection.
+     */
+    void clear();
+
+    /**
+     * Close socket connection, free all resources.
+     */
+    void end();
+
     QueryFilter queryFilter;
 
 private:
     bool _isStreamTimeout;
     bool _isStream;
-    bool _streamStop;
     bool _isSilentResponse;
 
     bool _bufferOverflow;
     bool _streamDataChanged;
     bool _streamPathChanged;
     bool _dataAvailable;
-    bool _keepAlive;
-    bool _httpConnected;
-    bool _interruptRequest;
+    bool _tcpConnected;
     bool _mismatchDataType;
     bool _pathNotExist;
-    bool _pause;
+    bool _paused;
     int _dataType;
-    int _dataType2;
+    int _last_dataType;
     uint8_t _dataTypeNum;
     uint8_t _connectionStatus;
 
     uint8_t _r_method = 0;
-    uint8_t _r_dataType;
+    uint8_t _r_dataType = 0;
 
-    String _path = "";
-    String _data = "";
-    String _data2 = "";
-    String _streamPath = "";
-    String _pushName = "";
-    String _redirectURL = "";
-    String _firebaseError = "";
-    String _eventType = "";
+    uint16_t _payload_crc = 0;
+
+    String _path;
+    String _payload;
+    String _streamPath;
+    String _pushName;
+    String _redirectURL;
+    String _firebaseError;
+    String _eventType;
 
     int _httpCode;
     int _contentLength;
 
     unsigned long _dataMillis;
-    unsigned long _streamMillis;
-    unsigned long _streamResetMillis;
-    WCS _wcs;
-    void end();
+    Firebase_TCP_Client _tcpClient;
+   
 
     friend Firebase_Class;
 };

@@ -103,6 +103,9 @@ void loop()
       Serial.println("error, "+ fbdo.errorReason());
     }
     Serial.println();
+
+    // clear internal memory used
+    fbdo.clear();
   }
 
   if (!Firebase.readStream(stream))
@@ -146,5 +149,8 @@ void loop()
     else if (stream.dataType() == "array")
       Serial.println(stream.arrayData());
     Serial.println();
+
+    // clear internal memory used
+    stream.clear();
   }
 }

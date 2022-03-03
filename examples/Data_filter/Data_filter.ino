@@ -122,6 +122,9 @@ void setup()
 
   //Release memory used by query object
   query.end();
+
+  // clear internal memory used
+  fbdo.clear();
 }
 
 void loop()

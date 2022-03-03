@@ -1,26 +1,25 @@
 # Firebase RTDB Arduino Client for ARM/AVR WIFI Dev Boards
 
 
-Google's Firebase Realtime Database Arduino Library for ARM/AVR WIFI Dev Boards 
-based on WiFi101 library, v 1.2.3
-
-This client library provides the most reliable operations for read, store, and update the Firebase RTDB through the REST API.
+Google's Firebase Realtime Database Arduino Library based on WiFi101 library, v1.2.4.
 
 
 The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards.
 
-Due to the different of platform's available memory, flash size, and WiFiClient functionalities which required the performance and memory optimization rather than the compatibility viewpoint of the standard Arduino WiFiClient function, the Firebase libraries will be fine tuned for different WiFi capable platforms.
-
-Install the library on the WiFi capable device is highly recommended. For non-WiFi capable devices, using the WiFi-Serial bridge libraries and similar firmwares included AT in ESP8266 and ESP32 WiFi moules that claim to be working are not highly recommended due to lack of performance. 
-
-For Espressif MCUs, please try [ESP8266 Firebase Arduino library]( https://github.com/mobizt/Firebase-ESP8266) and [ESP32 Firebase Arduino library]( https://github.com/mobizt/Firebase-ESP32)
 
 
+For other devices with larger memory and flash space, please try
 
-For Arduino MKR WiFi 1010, Arduino MKR VIDOR 4000 and Arduino UNO WiFi Rev.2, please try [Firebase Arduino Library for ARM/AVR WIFI Dev Boards based on WiFiNINA](https://github.com/mobizt/Firebase-Arduino-WiFiNINA)
+[Firebase-ESP8266](https://github.com/mobizt/Firebase-ESP8266)
+
+[Firebase-ESP32](https://github.com/mobizt/Firebase-ESP32)
+
+[Firebase-ESP-Client](https://github.com/mobizt/Firebase-ESP-Client)
+
+[Firebase-Arduino-WiFiNINA](https://github.com/mobizt/Firebase-Arduino-WiFiNINA)
 
 
-Copyright (c) 2019 K. Suwatchai (Mobizt).
+Copyright (c) 2022 K. Suwatchai (Mobizt).
 
 
 
@@ -1518,7 +1517,7 @@ String payload();
 
 The MIT License (MIT)
 
-Copyright (c) 2021 K. Suwatchai (Mobizt)
+Copyright (c) 2022 K. Suwatchai (Mobizt)
 
 
 Permission is hereby granted, free of charge, to any person returning a copy of

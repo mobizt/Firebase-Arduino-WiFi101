@@ -188,6 +188,9 @@ void setup()
     Serial.println("error, " + fbdo.errorReason());
   }
   Serial.println();
+
+  // clear internal memory used
+  fbdo.clear();
 }
 
 void loop()
