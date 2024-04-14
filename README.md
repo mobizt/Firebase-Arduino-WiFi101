@@ -1,19 +1,14 @@
 # Firebase RTDB Arduino Client for ARM/AVR WIFI Dev Boards
 
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/mobizt?logo=github)](https://github.com/sponsors/mobizt)
+
+
 Google's Firebase Realtime Database Arduino Library based on WiFi101 library, v1.2.5.
 
 The library supports Arduino WiFi Shield 101 and Arduino MKR1000 WIFI Boards.
 
-
-For other devices with larger memory and flash space, please try
-
-[Firebase-ESP8266](https://github.com/mobizt/Firebase-ESP8266)
-
-[Firebase-ESP32](https://github.com/mobizt/Firebase-ESP32)
-
-[Firebase-ESP-Client](https://github.com/mobizt/Firebase-ESP-Client)
-
-[Firebase-Arduino-WiFiNINA](https://github.com/mobizt/Firebase-Arduino-WiFiNINA)
+> [!WARNING] 
+> This This library is now obsoleted and replaced by the new [FirebaseClient](https://github.com/mobizt/FirebaseClient) library.
 
 
 Copyright (c) 2022 K. Suwatchai (Mobizt).
